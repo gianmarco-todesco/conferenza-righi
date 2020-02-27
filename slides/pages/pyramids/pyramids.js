@@ -1,3 +1,7 @@
+// Gian Marco Todesco
+// https://github.com/gianmarco-todesco/conferenza-righi
+//
+
 const slide = {
     name:'Pyramid'
 }

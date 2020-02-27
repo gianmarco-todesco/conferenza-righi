@@ -1,3 +1,6 @@
+// Gian Marco Todesco
+// https://github.com/gianmarco-todesco/conferenza-righi
+//
 "use strict";
 
 twgl.setDefaults({attribPrefix: "a_"});

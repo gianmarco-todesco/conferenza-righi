@@ -1,3 +1,6 @@
+// Gian Marco Todesco
+// https://github.com/gianmarco-todesco/conferenza-righi
+//
 "use strict";
 
 const slide = {
@@ -25,96 +28,6 @@ function setup() {
 
     populateScene()
 
-
-
-
-    // customMesh.position.y = -3
-
-    
-/*
-
-BABYLON.Effect.ShadersStore[shaderName + "VertexShader"]= `
-    precision highp float;
-
-    // Attributes
-    attribute vec3 position;
-    attribute vec2 uv;
-
-    attribute vec2 phi_cssn;
-    attribute vec3 color;
-
-    // Uniforms
-    uniform mat4 worldViewProjection, world;
-    uniform float time;
-
-    // Normal
-    varying vec2 vUV;
-    varying vec3 v_norm;
-    varying vec3 v_pos;
-    varying float v_x4;
-    uniform float u_cs, u_sn;
-    varying float err;
-    varying vec3 v_color;
-    varying vec3 v_surfaceToLight;
-    varying vec3 v_surfaceToView;
-
-
-    #define PI 3.1415926535897932384626433832795
-
-    vec3 fun(float u, float v) {   
-        float u_ab = phi_cssn[0];
-        float u_cd = phi_cssn[1];
-        
-        float r = u_ab*sin(v*PI);
-        float x2 = u_ab*cos(v*PI);
-        float x1 = r*cos(2.0*u*PI);
-        float x3 = r*sin(2.0*u*PI);
-        float x4 = u_cd;
-        float tm;
-        
-        tm = x1*u_cs-x4*u_sn;
-        x4 = x1*u_sn+x4*u_cs;
-        x1 = tm;        
-        v_x4 = x4;
-        float d = 1.0/(1.0-x4);            
-        return d*vec3(x1,x2,x3);
-    }
-
-    void main(void) {
-        v_color = color;
-        vec3 p = fun(uv.x, uv.y);
-        float epsilon = 0.00001;
-        vec3 dpdu = fun(uv.x+epsilon, uv.y) - p;
-        vec3 dpdv = fun(uv.x, uv.y+epsilon) - p;
-        v_norm = normalize(cross(dpdu, dpdv));
-        v_pos = p;
-        gl_Position = worldViewProjection * vec4(p, 1.0);
-        vUV = uv;
-        if(p.x*p.x+p.y*p.y+p.z*p.z>100.0) err = 1.0;
-        else err = 0.0;
-
-        v_surfaceToLight = vec3(0.0,10.0,0.0) - (world * vec4(p,1.0)).xyz;
-        v_surfaceToView = (vec4(0.0,0.0,10.0,1.0) - (world * vec4(p,1.0))).xyz; // u_viewInverse[3] 
-      
-    }
-`
-
-*/
-
-
-    
-
-/*
-arr[2] = 1.0
-customMesh.customInstancesBuffer = new BABYLON.Buffer(
-        engine, 
-        customMesh.customInstanceData , true, 1, false, true);
-customMesh.customVertBuffer = customMesh.customInstancesBuffer.createVertexBuffer(
-    "customattr", 0, 1);
-
-customMesh.setVerticesBuffer(customMesh.customVertBuffer);
-
-*/
 
     let R = 0.0;
     let dr = 0.000001;
@@ -254,9 +167,6 @@ function createMesh() {
                 "time", 
                 "u_cs", "u_sn"]
         });
-        /*
-        // amigaMaterial.setTexture("textureSampler", new BABYLON.Texture("amiga.jpg", scene));
-        */
        material.backFaceCulling = false;
 
 

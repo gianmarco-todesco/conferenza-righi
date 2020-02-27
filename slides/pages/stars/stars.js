@@ -1,3 +1,7 @@
+// Gian Marco Todesco
+// https://github.com/gianmarco-todesco/conferenza-righi
+//
+
 "use strict"
 
 const slide = {
@@ -124,57 +128,6 @@ function initializeScene() {
     
 }
 
-/*
-
-function createEdge(scene, p0,p1) {
-    var distance = BABYLON.Vector3.Distance(p0, p1);
-    var cylinder = BABYLON.Mesh.CreateCylinder("cylinder", distance, 0.05, 0.05, 36, scene, true);    
-    cylinder.setPivotMatrix(BABYLON.Matrix.Translation(0, distance / 2, 0)); 
-
-    var dx = p0.x-p1.x;
-    var dz = p0.z-p1.z;
-    var r2 = dx*dx+dz*dz;
-    
-    var v1 = p1.subtract(p0);
-    v1.normalize();
-    if(r2<0.001)
-    {
-        if(p1.y>p0.y) cylinder.position = p0;
-        else cylinder.position = p1;
-    }
-    else                
-    {
-        var v2 = new BABYLON.Vector3(0, 1, 0);                    
-        var axis = BABYLON.Vector3.Cross(v2, v1);
-        axis.normalize();
-
-        var angle = Math.acos(BABYLON.Vector3.Dot(v1, v2));
-        cylinder.position = p0;
-        cylinder.rotationQuaternion = BABYLON.Quaternion.RotationAxis(axis, angle);
-    }
-    return cylinder;           
-}
-
-
-function createAxes() {
- 
-    var sphere = BABYLON.Mesh.CreateSphere('sphere1', 16, 0.1, scene);            
-    var edge;
-
-    edge = createEdge(scene, new BABYLON.Vector3(0,0,0), new BABYLON.Vector3(1,0,0));
-    edge.material = new BABYLON.StandardMaterial("redAxisMat", scene);
-    edge.material.diffuseColor = new BABYLON.Color3(0.8, 0.2, 0.2);
-
-    edge = createEdge(scene, new BABYLON.Vector3(0,0,0), new BABYLON.Vector3(0,1,0));
-    edge.material = new BABYLON.StandardMaterial("greenAxisMat", scene);
-    edge.material.diffuseColor = new BABYLON.Color3(0.2, 0.8, 0.2);
-
-    edge = createEdge(scene, new BABYLON.Vector3(0,0,0), new BABYLON.Vector3(0,0,1));
-    edge.material = new BABYLON.StandardMaterial("blueAxisMat", scene);
-    edge.material.diffuseColor = new BABYLON.Color3(0.2, 0.2, 0.8);
-
-}
-*/
 
 
 // n.b. circumscribed sphere radius = 2.0;
@@ -262,15 +215,6 @@ var polyhedraData = {
     }),
 };        
   
-
-/*
-function step(t, a,b) { return t<a?0.0:t>b?1.0:(t-a)/(b-a); }
-function smooth(t) { return t*t*(3-2*t); }
-function smoothstep(t, a,b) { return smooth(step(t,a,b)); }
-*/
-
-
-
 function createStarFace() {
     const scene = slide.scene
     var n = 5;
@@ -317,7 +261,6 @@ function createStarFace() {
         indices.push(k,k+2,k+1, k+1,k+2,k+3);
         k+=4;
     }
-    // console.log(positions.length, normals.length);
     
     // bottom faces
     for(var i=0;i<2*n+1;i++) {        
@@ -339,7 +282,6 @@ function createStarFace() {
     vertexData.uvs = uvs;
 
     vertexData.applyToMesh(ph);
-    // ph.convertToFlatShadedMesh();
 
     return ph;
 }
@@ -347,7 +289,17 @@ function createStarFace() {
 function createFaceTexture() {
     const scene = slide.scene
 
-    let texture = new BABYLON.DynamicTexture('face-texture', {}, scene)
+    let texture = new BABYLON.DynamicTexture('face-texture', {
+        width:256, height:256
+    }, scene)
+    let ctx = texture.getContext()
+    ctx.fillStyle = 'orange'
+    ctx.fillRect(0,0,256,256)
+    ctx.fillStyle = 'black'
+    ctx.fillRect(0,0,256,16)
+    ctx.beginPath()
+    texture.update()
+    return texture
 }
 
 function createModel() {
@@ -361,7 +313,7 @@ function createModel() {
     var face = createStarFace();
     face.material =  new BABYLON.StandardMaterial("fiveStarFaceMaterial", scene);
     face.material.diffuseColor = new BABYLON.Color3(.9,.9,.9);
-    // face.material.diffuseTexture = new BABYLON.Texture("star-texture.png", scene);
+    face.material.diffuseTexture = createFaceTexture()
     face.material.specularColor = new BABYLON.Color3(.1,.1,.1);
     faces.push(face);
     for(var i=0;i<11;i++) {

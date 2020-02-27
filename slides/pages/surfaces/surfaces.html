@@ -2,7 +2,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<title>test surface viewer</title>
+<meta name="author" content="Gian Marco Todesco"/>
+<title>Surface viewer</title>
 <script src="twgl-full_3.min.js"></script>
 <script src="shader_programs.js"></script>
 <script src="surface_viewer.js"></script>
@@ -16,9 +17,14 @@ canvas { width:100%; height:100%; touch-action: none;
 <canvas id="surface-viewer"></canvas>
 
 <script>
-    const slide = {
-        name: 'surfaces'
-    }
+
+// Gian Marco Todesco
+// https://github.com/gianmarco-todesco/conferenza-righi
+//
+
+const slide = {
+    name: 'surfaces'
+}
 
 var viewer = new SurfaceViewer('surface-viewer');
 render = function() {
@@ -28,16 +34,6 @@ render = function() {
     if(gl.NO_ERROR != gl.getError()) throw "uff";
     if(window.meter) meter.tick();
 }
-/*
-var formula = `
-float q = sin((12.0 * u + sin(v * 6.0 * PI) * 1.5) * PI) * 0.05 + 0.5;
-q *= (0.7 + 0.25*cos(v*2.0*PI*6.0));
-p += vec3(q,0.0,0.0); 
-p = ry(p,u * 2.0 * PI); 
-p += vec3(1.0,0.0,0.0); 
-p = rz(p,v * 2.0 * PI);
-`;
-*/
 var formula = `
 
 float phi = u*2.*PI;
@@ -67,7 +63,7 @@ animate = function () {
     if(running) requestAnimationFrame(animate);
 }
 
-var targetState = 0;
+var targetState = 3;
 var state = 0;
 var parameters = [
     [0,0,0],
