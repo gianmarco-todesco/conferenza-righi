@@ -15,87 +15,6 @@ var theta = Math.PI/2 - Math.asin(1/Math.sqrt(3));
 // ogni 'period' secondi
 var period = 5;
 
-//
-// createGrid()
-//
-// crea un LineSystem con i tre assi e 
-// una griglia che rappresenta il piano xz
-//
-function createGrid() {    
-    const scene = slide.scene
-    var m = 50;
-    var r = 5;
-    var pts = [];
-    var colors = [];
-    // colore linee principali nella griglia 
-    var c1 = new Color4(0.8,0.7,0.7,0.5); // (r,g,b,trasparenza)
-    // colore linee secondarie nella griglia
-    var c2 = new Color4(0.5,0.5,0.5,0.25);
-    // gli assi x,y,z sono colorati in rosso,verde e blu
-    var cRed   = new Color4(0.8,0.1,0.1);
-    var cGreen = new Color4(0.1,0.8,0.1);
-    var cBlue  = new Color4(0.1,0.1,0.8);
-    
-    // colore corrente (usato da line())    
-    var color;
-    
-    // funzione di comodità: aggiunge una linea del colore 'color'
-    function line(x0,y0,z0, x1,y1,z1) { 
-        pts.push([new Vector3(x0,y0,z0), new Vector3(x1,y1,z1)]); 
-        colors.push([color,color]); 
-    }
-  
-    // disegno la griglia   
-    for(var i=0;i<=m;i++) {
-        // le linee centrali si sovrapporrebbero agli assi X e Z
-        if(i*2==m) continue; 
-        // scelgo il colore
-        color = (i%5)==0 ? c1 : c2;
-        // disegno due linee, parallele a Z e X
-        var coord = -r+2*r*i/m;        
-        line(coord,0,-r, coord,0,r);
-        line(-r,0,coord, r,0,coord);
-    }
-
-    // disegno gli assi    
-    var r1 = r + 1; // sporgono un po' rispetto alla griglia
-    // a1,a2 controllano la forma della "freccia" che indica il 
-    // verso di ogni asse
-    var a1 = 0.2;    
-    var a2 = 0.5;
-    
-    // asse X
-    color = cRed;
-    line(-r1,0,0, r1,0,0); 
-    line(r1,0,0, r1-a2,0,a1);
-    line(r1,0,0, r1-a2,0,-a1);
-        
-    // asse Z
-    color = cBlue;
-    line(0,0,-r1, 0,0,r1); 
-    line(0,0,r1, a1,0,r1-a2);
-    line(0,0,r1,-a1,0,r1-a2);
-    
-    // asse Y 
-    color = cGreen;
-    line(0,-r1,0, 0,r1,0); 
-    line(0,r1,0, a1,r1-a2,0);
-    line(0,r1,0,-a1,r1-a2,0);
-    line(0,r1,0, 0,r1-a2,a1);
-    line(0,r1,0, 0,r1-a2,-a1);
-    
-    // creo il LineSystem
-    ppts = pts;
-    ccolors = colors;
-    lines = BABYLON.MeshBuilder.CreateLineSystem(
-        "lines", {
-            lines: pts,
-            colors: colors,                
-        }, 
-        scene);
-    return lines;    
-} 
-
 // 
 // creo l'oggetto piramide 
 //
@@ -176,7 +95,7 @@ function setup() {
     // la camera (che definisce il punto di vista)
     let camera = slide.camera = new BABYLON.ArcRotateCamera(
         "camera1", 0.0 ,1.0,10, 
-        new BABYLON.Vector3(0, 0,0), 
+        new BABYLON.Vector3(0, 1.5,0), 
         scene);
     // faccio in modo che la camera sia controllabile con il 
     // mouse e la tastiera
@@ -219,6 +138,7 @@ function setup() {
 
 function onResize() { slide.engine.resize() }
 
+// funzione chiamata quando si cambia slide
 function cleanup() {
     window.removeEventListener("resize", onResize)
     slide.engine.stopRenderLoop()
@@ -227,3 +147,4 @@ function cleanup() {
     slide.engine.dispose
     delete slide.engine   
 }
+

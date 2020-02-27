@@ -1,27 +1,31 @@
+"use strict"
+
 const slide = {
     name: 'stars'
 }
-let canvas;
-let engine;
-let scene;
-let star;
 let spinning = true;
 let running = false;
+let tickables = [];
 
+//
+// inizializzazione
+// creo la scena, la griglia e gli assi, le piramidi, ecc.
+// n.b. la funzione viene chiamata quando la pagina è
+// stata completamente caricata nel browser ('onload')
 function setup() {
-    canvas = slide.canvas = document.getElementById('renderCanvas');
+    let canvas = slide.canvas = document.getElementById('renderCanvas');
     canvas.oncontextmenu = function (e) {
         e.preventDefault();
     };
-    engine = slide.engine = new BABYLON.Engine(canvas, true);
-    scene = slide.scene = new BABYLON.Scene(engine);
+    let engine = slide.engine = new BABYLON.Engine(canvas, true);
+    let scene = slide.scene = new BABYLON.Scene(engine);
 
     initializeScene();
 
     window.addEventListener('resize', onResize);            
     
     window.addEventListener("keydown", function(e) { 
-        this.console.log("uff", e)               
+        const paramAnimator = slide.paramAnimator
         if(e.keyCode == 49) paramAnimator.targetValue = -0.31; 
         else if(e.keyCode == 50) paramAnimator.targetValue = 0.12; 
         else if(e.keyCode == 51) paramAnimator.targetValue = 1.0; 
@@ -36,6 +40,7 @@ function setup() {
 
 function onResize() { engine.resize() }
 
+// viene chiamata quando si cambia la slide corrente
 function cleanup() {
     window.removeEventListener("resize", onResize)
     slide.engine.stopRenderLoop()
@@ -67,11 +72,8 @@ ValueController.prototype.tick = function() {
     else  {currentValue -= dt * speed; stop = currentValue<=targetValue; }
     if(stop) currentValue = targetValue;
     this.setter(currentValue);
-    xx = currentValue;
 }
 
-var paramAnimator;
-var tickables = [];
 function tick() {
     let t = performance.now()
     let dt = t-slide.oldt
@@ -80,26 +82,28 @@ function tick() {
 }
 
 
-
-
 function initializeScene() {
-
-    camera = new BABYLON.ArcRotateCamera("ArcRotateCamera", -Math.PI/2, Math.PI/2, 4, new BABYLON.Vector3(0, 0, 0), scene);
+    const scene = slide.scene
+    let camera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 
+        -Math.PI/2, Math.PI/2, 4, 
+        new BABYLON.Vector3(0, 0, 0), 
+        scene);
     camera.lowerRadiusLimit = 2;
     camera.wheelPrecision = 30;
     camera.setTarget(BABYLON.Vector3.Zero());
-    camera.attachControl(canvas, false);
+    camera.attachControl(slide.canvas, false);
 
-    light = new BABYLON.PointLight('light1', new BABYLON.Vector3(0,0,0), scene);
+    let light = new BABYLON.PointLight('light1', 
+        new BABYLON.Vector3(0,0,0), 
+        scene);
     light.parent = camera;
 
-    // light2 = new BABYLON.HemisphericLight('light2', new BABYLON.Vector3(3,-1,-30), scene);
-    
-    // createAxes() ;
-    star = createModel();
+    let star = createModel();
     star.setParam(0.12);
     
-    paramAnimator = new ValueController(function() { return star.param; }, function(v) { star.setParam(v); }, 0.1);
+    let paramAnimator = slide.paramAnimator = new ValueController(
+        function() { return star.param; }, 
+        function(v) { star.setParam(v); }, 0.1);
     tickables.push(paramAnimator);
     
     tickables.push({
@@ -120,6 +124,7 @@ function initializeScene() {
     
 }
 
+/*
 
 function createEdge(scene, p0,p1) {
     var distance = BABYLON.Vector3.Distance(p0, p1);
@@ -169,6 +174,7 @@ function createAxes() {
     edge.material.diffuseColor = new BABYLON.Color3(0.2, 0.2, 0.8);
 
 }
+*/
 
 
 // n.b. circumscribed sphere radius = 2.0;
@@ -266,6 +272,7 @@ function smoothstep(t, a,b) { return smooth(step(t,a,b)); }
 
 
 function createStarFace() {
+    const scene = slide.scene
     var n = 5;
     var h = 0.01;
     var r1 = 1; 
@@ -337,19 +344,24 @@ function createStarFace() {
     return ph;
 }
 
+function createFaceTexture() {
+    const scene = slide.scene
+
+    let texture = new BABYLON.DynamicTexture('face-texture', {}, scene)
+}
 
 function createModel() {
-
-    var pData = polyhedraData.dod;
+    const scene = slide.scene
+    let pData = polyhedraData.dod;
     
-    var mesh = new BABYLON.Mesh('star', scene);
+    let mesh = new BABYLON.Mesh('star', scene);
     mesh.isVisible = false;
     var faces = mesh.faces = [];
     
     var face = createStarFace();
     face.material =  new BABYLON.StandardMaterial("fiveStarFaceMaterial", scene);
     face.material.diffuseColor = new BABYLON.Color3(.9,.9,.9);
-    face.material.diffuseTexture = new BABYLON.Texture("star-texture.png", scene);
+    // face.material.diffuseTexture = new BABYLON.Texture("star-texture.png", scene);
     face.material.specularColor = new BABYLON.Color3(.1,.1,.1);
     faces.push(face);
     for(var i=0;i<11;i++) {
