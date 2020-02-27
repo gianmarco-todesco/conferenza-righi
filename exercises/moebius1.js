@@ -1,3 +1,7 @@
+// Gian Marco Todesco
+// https://github.com/gianmarco-todesco/conferenza-righi
+//
+
 var canvas, engine, scene, camera;
 var elementi = [];
 
@@ -15,7 +19,6 @@ function inizia() {
 	camera.lowerRadiusLimit = 3;
 	
     // luci
-
     var light1 = new BABYLON.PointLight(
         'light1',
         new BABYLON.Vector3(0,1,0), scene);
@@ -70,6 +73,5 @@ function animaScena() {
 		box.position.set(5*Math.cos(phi), 0, 5*Math.sin(phi));
 	}
 }
-
 
 window.onload = inizia

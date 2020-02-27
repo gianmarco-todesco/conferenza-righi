@@ -1,3 +1,7 @@
+// Gian Marco Todesco
+// https://github.com/gianmarco-todesco/conferenza-righi
+//
+
 var canvas,engine,scene,camera,light,ground;
 var toruses;
 var m = 7;
@@ -7,7 +11,7 @@ var sphere;
 window.addEventListener("DOMContentLoaded", function() {
 	
 	// canvas, engine, scene
-    canvas = document.getElementById('c');
+    canvas = document.getElementById('renderCanvas');
     engine = new BABYLON.Engine(canvas, true);
     scene = new BABYLON.Scene(engine);
     scene.ambientColor = new BABYLON.Color3(0.3,0.3,0.3);
@@ -23,7 +27,8 @@ window.addEventListener("DOMContentLoaded", function() {
     light.parent = camera;
 
 	// griglia (vedi plslib.js)
-    createGrid(scene);
+    let grid = createGrid(scene);
+    grid.position.y = -1.15
 
 	// creo gli anelli
     toruses = [];
@@ -67,6 +72,15 @@ window.addEventListener("DOMContentLoaded", function() {
     engine.runRenderLoop(function() { scene.render(); });
     window.addEventListener('resize', function() { engine.resize(); });
     
+    // per fare in modo che la telecamera segua la sferetta
+    // scommenta questo codice:
+    /*
+        camera.parent = sphere
+        camera.radius = 5.18
+        camera.alpha = -1.58
+        camera.beta = 1.12
+    */
+
 });
 
 var rr = 5;
@@ -98,3 +112,5 @@ function animate() {
     sphere.position.set(r*Math.cos(psi),0,r*Math.sin(psi) );
     sphere.rotation.y = -psi
 }
+
+

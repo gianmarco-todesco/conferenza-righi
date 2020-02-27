@@ -2,13 +2,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <title>Template</title>
-        <link rel="stylesheet" href="style.css">
+        <meta name="author" content="Gian Marco Todesco"/>
+        <title>Puzzle</title>
         <script src="https://preview.babylonjs.com/babylon.js"></script>
         <script src="righilib.js"></script>
         <script src="game1.js"></script>
+        <style>
+            #renderCanvas {
+                width:400px;
+                height:400px;
+                box-shadow: 10px 10px 10px gray;
+            }
+        </style>
     </head>
     <body>
+        <h1>Giochetto</h1>
         <canvas id="renderCanvas"></canvas> 
+        <p>Fai click su una sfera! Quella sfera cambia colore e così 
+            anche le 3 sfere adiacenti.</p>
+        <p>Riesci ad ottenere 8 sfere azzurre?</p>
     </body>
 </html>

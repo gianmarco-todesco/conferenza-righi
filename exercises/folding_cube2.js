@@ -1,17 +1,26 @@
+// Gian Marco Todesco
+// https://github.com/gianmarco-todesco/conferenza-righi
+//
+
 let canvas, engine, scene
 let light1, light2
 let cubes
 
-function createCube() {
+function createFoldingCube() {
+    // crea la prima faccia
     let firstFace = BABYLON.MeshBuilder.CreateBox('face', {
         width:1.95,height:0.1,depth:1.95
     },scene)
+    // e le altre
     let faces = []
     for(let i=1;i<6;i++) {
+        // le facce secondarie sono delle copie della prima faccia
+        // (questo velocizza il rendering)
         let face = firstFace.createInstance('inst-'+i)
         face.setPivotPoint(new BABYLON.Vector3(1,0,0))
         faces.push(face)
     }
+    // attacco le prime 4 facce secondarie alla faccia principale
     for(let i=0; i<4; i++) {
         let face = faces[i]
         let p = new BABYLON.Mesh('p', scene)
@@ -19,7 +28,7 @@ function createCube() {
         p.rotation.y = (i+1)*Math.PI/2
         face.parent = p
     }
-
+    // ... e l'ultima faccia secondaria alla prima
     
     let face = faces[4]
     let p = new BABYLON.Mesh('p', scene)
@@ -28,6 +37,8 @@ function createCube() {
     p.rotation.x = Math.PI
     face.parent = p
     
+    // associo alla prima faccia (che rappresenta l'intero cubo)
+    // una funzione setAperture() che apre e chiude il cubo
     firstFace.setAperture = function(aperture) {
         let angle = aperture * Math.PI * 0.5 + Math.PI * 0.5 
         faces.forEach((face,i) => { face.rotation.z = -angle  })
@@ -40,73 +51,47 @@ function populateScene() {
     cubes = []
     createGrid(scene)
 
-    
-    let cube = createCube()
+    // creo il primo cubo
+    let cube = createFoldingCube()
     cubes.push(cube)
 
+    // e il relativo materiale
     let mat1 = cube.material = new BABYLON.StandardMaterial('mat', scene)
     mat1.diffuseColor.set(0.4,0.7,0.9)
     mat1.specularColor.set(0.1,0.1,0.1)
 
-    let cube2 = createCube()
+    // il secondo cubo
+    let cube2 = createFoldingCube()
     cubes.push(cube2)
-
-    cube2.position.y = 0.2
-    cube2.rotation.y = Math.PI/2
-    cube2.scaling.set(0.8,0.8,0.8)
-
     let mat2 = cube2.material = new BABYLON.StandardMaterial('mat', scene)
     mat2.diffuseColor.set(0.3,0.9,0.2)
     mat2.specularColor.set(0.1,0.1,0.1)
 
-/*
-    let face = faces[5]
-    face.setPivotMatrix(
-        BABYLON.Matrix.RotationAxis(yAxis,-Math.PI/2)
-        .multiply(BABYLON.Matrix.Translation(1,0,0)))
-    face.parent = faces[1]
-    face.rotation.z = -2.3
-*/
-
-
-    /*
-    let p
-    for(let i=1; i<=4; i++) {
-        p = new BABYLON.Mesh('p',scene)
-        p.parent = faces[0]
-        p.rotation.y = i*Math.PI/2
-        faces[i].parent = p
-        faces[i].setPivotPoint(new BABYLON.Vector3(1,0,0))
-        faces[i].rotation.z = -2*Math.PI/3    
-    }
-
-    p = new BABYLON.Mesh('p',scene)
-    p.parent = faces[1]
-    p.rotation.y = Math.PI/2
-
-    faces[5].parent = p
-    faces[5].setPivotPoint(new BABYLON.Vector3(1,0,0))
-    faces[5].rotation.z = -2*Math.PI/3    
-*/
-
+    // il secondo cubo è ruotato, un po' rimpicciolito e spostato 
+    // rispetto al primo cubo
+    cube2.position.y = 0.2
+    cube2.rotation.y = Math.PI/2
+    cube2.scaling.set(0.8,0.8,0.8)
 }
 
 function tick() {
+    // t è il tempo dall'inizio. Un'unità = 10 secondi
     let t = performance.now() * 0.0001
+    // faccio in modo che t sia sempre compreso fra 0 e 1.
     t -= Math.floor(t)
 
+    // t1 controlla il movimento del primo cubo
+    // comincia ad aprirsi quanto t=0.1 ed è aperto per t=0.3
+    // comincia a chiudersi a t=0.7 ed è completamente chiuso a t=0.9
     let t1 = smooth(subrange(t,0.1,0.3)) - smooth(subrange(t,0.7,0.9))
     cubes[0].setAperture(t1)
+
+    // analogamente per il secondo cubo
     let t2 = smooth(subrange(t,0.3,0.4)) - smooth(subrange(t,0.5,0.7))
     cubes[1].setAperture(t2)
-    
-    /*
-    let t2 = smooth(subrange(0.2,0.8))
-    cubes[1].setAperture(t1)
-    */
-
 }
 
+// solite cose (canvas, engine, camera, ecc.)
 window.onload = function() {
     canvas = document.getElementById("renderCanvas")
     engine = new BABYLON.Engine(canvas, true)

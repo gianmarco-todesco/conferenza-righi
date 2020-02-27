@@ -1,5 +1,12 @@
 
-//
+// righilib 
+// un certo numero di funzioni comode
+// preparate per la conferenza al righi del 27/2/2020
+
+// Gian Marco Todesco
+// https://github.com/gianmarco-todesco/conferenza-righi
+
+
 // createGrid()
 //
 // crea un LineSystem con i tre assi e 

@@ -1,3 +1,6 @@
+// Gian Marco Todesco
+// https://github.com/gianmarco-todesco/conferenza-righi
+//
 let canvas, engine, scene
 let light1, light2
 let faces
@@ -5,10 +8,12 @@ let faces
 function populateScene() {
     createGrid(scene)
 
+    // creo il materiale
     let mat = new BABYLON.StandardMaterial('mat', scene)
     mat.diffuseColor.set(0.4,0.7,0.9)
     mat.specularColor.set(0.1,0.1,0.1)
 
+    // le sei facce (0-5)
     faces = []
     for(let i=0;i<6;i++) {
         let face = BABYLON.MeshBuilder.CreateBox('face', {
@@ -17,10 +22,9 @@ function populateScene() {
         face.material = mat
         face.setPivotPoint(new BABYLON.Vector3(1,0,0))
         faces.push(face)
-
-
     }
 
+    // le facce 1-4 sono collegate alla 0
     for(let i=1; i<=4; i++) {
         let face = faces[i]
         let p = new BABYLON.Mesh('p', scene)
@@ -29,53 +33,27 @@ function populateScene() {
         face.parent = p
     }
 
+    // la faccia 5 è collegata alla 1
     let face = faces[5]
     let p = new BABYLON.Mesh('p', scene)
     p.parent = faces[1]
     p.rotation.y = Math.PI
     p.rotation.x = Math.PI
     face.parent = p
-/*
-    let face = faces[5]
-    face.setPivotMatrix(
-        BABYLON.Matrix.RotationAxis(yAxis,-Math.PI/2)
-        .multiply(BABYLON.Matrix.Translation(1,0,0)))
-    face.parent = faces[1]
-    face.rotation.z = -2.3
-*/
-
-
-    /*
-    let p
-    for(let i=1; i<=4; i++) {
-        p = new BABYLON.Mesh('p',scene)
-        p.parent = faces[0]
-        p.rotation.y = i*Math.PI/2
-        faces[i].parent = p
-        faces[i].setPivotPoint(new BABYLON.Vector3(1,0,0))
-        faces[i].rotation.z = -2*Math.PI/3    
-    }
-
-    p = new BABYLON.Mesh('p',scene)
-    p.parent = faces[1]
-    p.rotation.y = Math.PI/2
-
-    faces[5].parent = p
-    faces[5].setPivotPoint(new BABYLON.Vector3(1,0,0))
-    faces[5].rotation.z = -2*Math.PI/3    
-*/
-
 }
 
 function tick() {
-    let angle = (Math.sin(performance.now()*0.001) * 0.5 + 1.5) * Math.PI * 0.5;
-    faces.forEach((face,i) => {
-        if(i>0) {
-            face.rotation.z = -angle
-        }
-    })
+    // time: numero di secondi dall'inizio
+    let time = performance.now()*0.001
+    // apertura va da 0 a 1 e viceversa
+    let aperture = Math.sin(time) * 0.5 + 0.5
+    // l'angolo va da Math.PI/2 (cubo chiuso) a Math.PI (cubo aperto) 
+    let angle = (aperture + 1) * Math.PI * 0.5;
+    // ruota le facce 1..5
+    for(let i=1; i<6; i++) faces[i].rotation.z = -angle    
 }
 
+// quando la pagina è completamente caricata
 window.onload = function() {
     canvas = document.getElementById("renderCanvas")
     engine = new BABYLON.Engine(canvas, true)
@@ -99,4 +77,3 @@ window.onload = function() {
     engine.runRenderLoop(function () {  scene.render() })
     window.addEventListener("resize", function () { engine.resize() } )
 }
-

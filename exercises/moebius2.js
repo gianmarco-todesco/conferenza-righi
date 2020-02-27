@@ -1,3 +1,6 @@
+// Gian Marco Todesco
+// https://github.com/gianmarco-todesco/conferenza-righi
+//
 var canvas, engine, scene, camera;
 var coppie = [];
 

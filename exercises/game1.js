@@ -1,11 +1,13 @@
+// Gian Marco Todesco
+// https://github.com/gianmarco-todesco/conferenza-righi
+//
+
 let canvas, engine, scene
 let light1, light2
 let cube
 let vertices
 let color1 = new BABYLON.Color3(0.7,0.3,0.1)
 let color2 = new BABYLON.Color3(0.2,0.6,0.9)
-
-
 
 function populateScene() {
     // createGrid(scene)
@@ -69,11 +71,6 @@ function populateScene() {
                 let status = sph.status = 3 - sph.status
                 if(status==2) scene.beginAnimation(sph, 0, 30, true); 
                 else scene.beginAnimation(sph, 30, 0, true); 
-
-
-                
-                
-
             })
         }
     }    
@@ -89,8 +86,6 @@ function populateScene() {
         }
     })
 }
-
-
 
 
 function tick() {
@@ -119,6 +114,6 @@ window.onload = function() {
 
     scene.registerBeforeRender(tick)
     engine.runRenderLoop(function () {  scene.render() })
-    window.addEventListener("resize", function () { engine.resize() } )
+    // window.addEventListener("resize", function () { engine.resize() } )
 }
 

@@ -1,3 +1,8 @@
+
+// Gian Marco Todesco
+// https://github.com/gianmarco-todesco/conferenza-righi
+
+
 let canvas, engine, scene
 let light1, light2
 
