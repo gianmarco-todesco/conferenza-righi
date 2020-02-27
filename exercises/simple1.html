@@ -1,0 +1,22 @@
+<script src="https://preview.babylonjs.com/babylon.js"></script>
+<canvas id="c" width="600" height="400"></canvas>
+<script>
+    let canvas = document.getElementById("c")
+    let engine = new BABYLON.Engine(canvas, true)
+    let scene = new BABYLON.Scene(engine)
+    let camera = new BABYLON.ArcRotateCamera("Camera",
+         .7,1.4, 60, BABYLON.Vector3.Zero(), scene)
+    camera.attachControl(canvas, true)
+
+    let light1 = new BABYLON.HemisphericLight("light1", 
+        new BABYLON.Vector3(0, 1, 0.3), scene)
+    let sphere = BABYLON.MeshBuilder.CreateSphere("sphere", 
+        {diameter:20}, scene)
+    sphere.position.y = 10
+    let cube = BABYLON.MeshBuilder.CreateBox("box",
+        {size:20}, scene)
+    cube.position.y = -10
+    
+    engine.runRenderLoop(function () {  scene.render() })
+    addEventListener("resize", function () { engine.resize() } )
+</script>

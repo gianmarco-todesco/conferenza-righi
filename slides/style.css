@@ -1,0 +1,35 @@
+.reveal .quote {
+    text-align: justify;
+    padding:20px;
+}
+
+.reveal .reference {
+    text-align: right;
+    font-size:smaller;
+    font-style: italic;
+}
+
+.reveal .slides > section,
+.reveal .slides > section > section {
+    padding:0 0 20px 0;
+
+}
+
+.reveal .small {
+    font-size:smaller;
+}
+
+.reveal .photos img {
+    border:none;
+    position:absolute;
+}
+
+.reveal .no-mouse {
+    pointer-events: none;
+    z-index: -1;
+}
+
+.reveal iframe {
+    margin:5px;
+    border:solid 8px orange;    
+}

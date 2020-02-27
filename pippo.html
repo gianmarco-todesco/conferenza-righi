@@ -1,0 +1,34 @@
+<h1 style="border:solid 2px magenta">ciao mamma</h1>
+<p style="color:red">La vispa teresa</p>
+<p>avea tra l'erbetta</p>
+<canvas 
+    id="c" 
+    style="border:solid 2px magenta" 
+    width="300" height="300">
+
+</canvas>
+
+
+<script>
+    c = document.getElementById('c')
+    ctx = c.getContext('2d')
+    
+
+    function disegna(a) {
+        ctx.clearRect(0,0,300,300)
+        ctx.fillStyle = "green"
+        for(i=0;i<20;i++) {
+            x = 200 + a*Math.sin(i*0.7)
+            ctx.fillRect(x,10+i*15,50,10);
+        }
+    }
+
+    function anima() {
+        tempo = performance.now()*0.001
+
+        disegna(Math.sin(tempo)*100)
+        requestAnimationFrame(anima)
+    }
+    requestAnimationFrame(anima)
+
+</script>
